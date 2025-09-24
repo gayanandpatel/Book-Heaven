@@ -59,7 +59,7 @@ const App = () => {
       setError(null);
       try {
         // FIXED: Added window.location.origin as the base for the relative URL.
-        const url = new URL(`${API_URL}/books`, window.location.origin);
+        const url = new URL(`${API_URL}`, window.location.origin);
         url.searchParams.append('sort', sortBy);
         if (searchQuery) {
           url.searchParams.append('search', searchQuery);
