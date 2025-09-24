@@ -1,5 +1,3 @@
-// server.js
-
 import express from "express";
 import bodyParser from "body-parser";
 import pg from "pg";
@@ -9,7 +7,6 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const app = express();
-
 app.use(cors());
 
 const db = new pg.Client({
@@ -23,17 +20,14 @@ const db = new pg.Client({
   }
 });
 
-// BEST PRACTICE: Removed db.connect() from the top level.
-// The pg library will handle connecting when a query is made,
-// which is more reliable in a serverless environment.
 db.connect();
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // --- API ENDPOINTS ---
-
 app.get("/api/books", async (req, res) => {
   try {
+    // Your existing route logic...
     const sortBy = req.query.sort || 'best';
     const searchQuery = req.query.search || '';
     
@@ -71,6 +65,7 @@ app.get("/api/books", async (req, res) => {
 
 app.get("/api/books/:id", async (req, res) => {
     try {
+        // Your existing route logic...
         const bookId = req.params.id;
         const query = `
             SELECT 
@@ -80,13 +75,10 @@ app.get("/api/books/:id", async (req, res) => {
             LEFT JOIN notes n ON b.id = n.book_id
             WHERE b.id = $1;
         `;
-        
         const result = await db.query(query, [bookId]);
-        
         if (result.rows.length === 0) {
             return res.status(404).json({ error: "Book not found." });
         }
-        
         const bookDetails = {
             id: result.rows[0].id,
             book_name: result.rows[0].book_name,
@@ -96,16 +88,11 @@ app.get("/api/books/:id", async (req, res) => {
             recommendation: result.rows[0].recommendation,
             notes: []
         };
-        
         result.rows.forEach(row => {
             if (row.note !== null) {
-                bookDetails.notes.push({
-                    note: row.note,
-                    created_at: row.created_at
-                });
+                bookDetails.notes.push({ note: row.note, created_at: row.created_at });
             }
         });
-        
         res.json(bookDetails);
 
     } catch (err) {
@@ -115,11 +102,6 @@ app.get("/api/books/:id", async (req, res) => {
 });
 
 
-// DELETED: The local app.listen() block must be removed for Vercel.
-// app.listen(port, () => {
-//   console.log(`✅ Backend server running on http://localhost:${port}`);
-// });
-
-
-// ADDED: This is the correct way to export your app for Vercel when using ES Modules (import/export).
+// This is the REQUIRED export for Vercel.
+// DO NOT add app.listen() here.
 export default app;
