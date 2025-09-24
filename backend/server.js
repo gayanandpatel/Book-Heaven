@@ -1,3 +1,5 @@
+// server.js
+
 import express from "express";
 import bodyParser from "body-parser";
 import pg from "pg";
@@ -7,6 +9,8 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const app = express();
+const port = 3000;
+
 app.use(cors());
 
 const db = new pg.Client({
@@ -15,9 +19,7 @@ const db = new pg.Client({
   database: process.env.DB_DATABASE,
   password: process.env.DB_PASSWORD,
   port: process.env.DB_PORT,
-  ssl: {
-    rejectUnauthorized: false
-  }
+  
 });
 
 db.connect();
@@ -25,9 +27,9 @@ db.connect();
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // --- API ENDPOINTS ---
+
 app.get("/api/books", async (req, res) => {
   try {
-    // Your existing route logic...
     const sortBy = req.query.sort || 'best';
     const searchQuery = req.query.search || '';
     
@@ -65,8 +67,9 @@ app.get("/api/books", async (req, res) => {
 
 app.get("/api/books/:id", async (req, res) => {
     try {
-        // Your existing route logic...
         const bookId = req.params.id;
+        console.log(`\n--- Fetching book with ID: ${bookId} ---`); // DEBUG LOG
+        
         const query = `
             SELECT 
                 b.id, b.book_name, b.author, b.isbn, b.date, b.recommendation,
@@ -75,10 +78,16 @@ app.get("/api/books/:id", async (req, res) => {
             LEFT JOIN notes n ON b.id = n.book_id
             WHERE b.id = $1;
         `;
+        
         const result = await db.query(query, [bookId]);
+        
+        console.log("Raw database response rows:", result.rows); // DEBUG LOG
+        
         if (result.rows.length === 0) {
+            console.log(`No book found for ID: ${bookId}`); // DEBUG LOG
             return res.status(404).json({ error: "Book not found." });
         }
+        
         const bookDetails = {
             id: result.rows[0].id,
             book_name: result.rows[0].book_name,
@@ -88,11 +97,17 @@ app.get("/api/books/:id", async (req, res) => {
             recommendation: result.rows[0].recommendation,
             notes: []
         };
+        
         result.rows.forEach(row => {
             if (row.note !== null) {
-                bookDetails.notes.push({ note: row.note, created_at: row.created_at });
+                bookDetails.notes.push({
+                    note: row.note,
+                    created_at: row.created_at
+                });
             }
         });
+        
+        console.log("Assembled book details:", bookDetails); // DEBUG LOG
         res.json(bookDetails);
 
     } catch (err) {
@@ -102,6 +117,16 @@ app.get("/api/books/:id", async (req, res) => {
 });
 
 
-// This is the REQUIRED export for Vercel.
-// DO NOT add app.listen() here.
-export default app;
+// for local testing only
+app.listen(port, () => {
+  console.log(`✅ Backend server running on http://localhost:${port}`);
+});
+
+// FIX 3: Removed ALL app.listen() blocks. This is essential for Vercel.
+// const PORT = process.env.PORT || 3001;
+// app.listen(PORT, () => {
+//   console.log(`Server is running on port ${PORT}`);
+// });
+
+// This is the only line needed at the end for Vercel to use the file.
+// module.exports = app;
