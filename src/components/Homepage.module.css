@@ -1,0 +1,43 @@
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.subheader {
+  background-color: #D4C9BE;
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  font-size: 1.1em;
+}
+
+.subheader ul {
+    list-style-position: inside;
+    padding-left: 0;
+}
+
+.divider {
+  background-color: #706D54;
+  height: 2px;
+  width: 100%;
+  margin: 20px auto;
+  border: none;
+}
+
+.pageTitle {
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.booksContainer {
+  background-color: #F1EFEC;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.bookList {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}

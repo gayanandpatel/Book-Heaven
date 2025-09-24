@@ -1,0 +1,107 @@
+.bookCard {
+  padding-bottom: 20px;
+  border-bottom: 3px solid black;
+}
+
+.bookHeader {
+  margin-bottom: 20px;
+}
+
+.bookTitle {
+  font-size: 1.5em;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.bookMeta {
+  font-style: normal;
+  color: #333;
+  margin-bottom: 15px;
+  font-size: 0.95em;
+}
+
+.bookMeta strong {
+  font-weight: bold;
+}
+
+.bookContentWrapper {
+  display: flex;
+  gap: 25px;
+}
+
+.bookCover {
+  height: 220px;
+  width: auto;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+  flex-shrink: 0;
+  object-fit: cover;
+}
+
+.bookTextContent {
+  flex: 1;
+}
+
+.bookDescription {
+  margin: 0 0 15px 0;
+  line-height: 1.7;
+}
+
+.toggleDescription {
+  color: #0066cc;
+  cursor: pointer;
+  text-decoration: underline;
+  display: inline-block;
+  margin-top: 5px;
+  font-size: 0.9em;
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+.noCover {
+  width: 154px;
+  height: 220px;
+  background: #f5f5f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 10px;
+  font-size: 0.9em;
+  color: #666;
+  flex-shrink: 0;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  border: 1px solid #ddd;
+}
+
+.bookNotes {
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px dashed #999;
+  font-size: 0.95em;
+}
+
+.notesLink {
+    background: none;
+    border: none;
+    padding: 0;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.notesLink strong {
+    color: #0066cc;
+}
+
+.notesLink:hover strong {
+    text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .bookContentWrapper {
+    flex-direction: column;
+  }
+  .bookCover, .noCover {
+    margin: 0 auto 20px auto;
+  }
+}

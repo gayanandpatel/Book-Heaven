@@ -1,0 +1,91 @@
+.container {
+  background-color: #aed0f1;
+  padding: 20px;
+  border-radius: 10px;
+  max-width: 1200px;
+  margin: 20px auto;
+}
+
+.container h1 {
+    margin-bottom: 1.5rem;
+}
+
+.contentGrid {
+  display: grid;
+  grid-template-columns: 3fr 9fr;
+  gap: 20px;
+}
+
+.bookInfoContainer {
+  position: sticky;
+  top: 20px;
+  height: calc(100vh - 40px);
+  overflow-y: auto;
+}
+
+.bookMeta p {
+    margin-bottom: 0.5rem;
+}
+
+.coverImage {
+  width: 100%;
+  max-width: 250px;
+  height: auto;
+  margin-bottom: 1rem;
+}
+
+.backButtonContainer {
+  margin-top: 1rem;
+}
+
+.backButton {
+  background-color: #0d6efd;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.backButton:hover {
+    background-color: #0b5ed7;
+}
+
+.notesContainer {
+  height: calc(100vh - 120px);
+  overflow-y: auto;
+  padding-right: 15px;
+}
+
+.noteCard {
+  background-color: #e9eea8;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  margin-bottom: 20px;
+  padding: 1rem;
+}
+
+.noteContent {
+  line-height: 1.6;
+  white-space: pre-wrap;
+  margin-bottom: 0.5rem;
+}
+
+.noteDate {
+  text-align: right;
+  color: #6c757d;
+}
+
+@media (max-width: 768px) {
+    .contentGrid {
+        grid-template-columns: 1fr;
+    }
+    .bookInfoContainer, .notesContainer {
+        position: static;
+        height: auto;
+        overflow-y: visible;
+    }
+}
