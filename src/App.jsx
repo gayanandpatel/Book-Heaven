@@ -6,7 +6,10 @@ import BookNotes from './components/BookNotes.jsx';
 import './index.css';
 
 // The API now has a /api prefix for clarity
-const API_URL = "http://localhost:3000/api";
+// for local development, this points to the backend server
+// const API_URL = "http://localhost:3000/api";
+
+const API_URL = "/api"; // For production, assumes same origin
 
 const App = () => {
   const [currentPage, setCurrentPage] = useState('home');
