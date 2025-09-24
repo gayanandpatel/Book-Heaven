@@ -115,7 +115,16 @@ app.get("/api/books/:id", async (req, res) => {
     }
 });
 
-app.listen(port, () => {
-  console.log(`✅ Backend server running on http://localhost:${port}`);
+// app.listen(port, () => {
+//   console.log(`✅ Backend server running on http://localhost:${port}`);
+// });
+
+// This is for running the server locally
+const PORT = process.env.PORT || 3001;
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });
 
+
+// Export the app handler for Vercel
+module.exports = app;
