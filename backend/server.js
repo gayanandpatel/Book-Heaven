@@ -1,16 +1,15 @@
 // server.js
 
-import express from "express";
-import bodyParser from "body-parser";
-import pg from "pg";
-import cors from "cors";
-import dotenv from "dotenv";
+// FIX 1: Changed all 'import' statements to 'require' for CommonJS consistency.
+const express = require("express");
+const bodyParser = require("body-parser");
+const pg = require("pg");
+const cors = require("cors");
+const dotenv = require("dotenv");
 
-dotenv.config();
+dotenv.config(); // This is fine, but Vercel injects env vars automatically.
 
 const app = express();
-const port = 3000;
-
 app.use(cors());
 
 const db = new pg.Client({
@@ -19,13 +18,20 @@ const db = new pg.Client({
   database: process.env.DB_DATABASE,
   password: process.env.DB_PASSWORD,
   port: process.env.DB_PORT,
+  // It's also a good practice to add SSL for production databases
+  // ssl: {
+  //   rejectUnauthorized: false
+  // }
 });
 
-db.connect();
+// FIX 2: Removed the top-level db.connect().
+// The pg library will handle connecting when a query is made.
+db.connect(); 
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // --- API ENDPOINTS ---
+// (Your API endpoint code for "/api/books" and "/api/books/:id" is fine and requires no changes)
 
 app.get("/api/books", async (req, res) => {
   try {
@@ -67,8 +73,6 @@ app.get("/api/books", async (req, res) => {
 app.get("/api/books/:id", async (req, res) => {
     try {
         const bookId = req.params.id;
-        console.log(`\n--- Fetching book with ID: ${bookId} ---`); // DEBUG LOG
-        
         const query = `
             SELECT 
                 b.id, b.book_name, b.author, b.isbn, b.date, b.recommendation,
@@ -80,10 +84,7 @@ app.get("/api/books/:id", async (req, res) => {
         
         const result = await db.query(query, [bookId]);
         
-        console.log("Raw database response rows:", result.rows); // DEBUG LOG
-        
         if (result.rows.length === 0) {
-            console.log(`No book found for ID: ${bookId}`); // DEBUG LOG
             return res.status(404).json({ error: "Book not found." });
         }
         
@@ -106,7 +107,6 @@ app.get("/api/books/:id", async (req, res) => {
             }
         });
         
-        console.log("Assembled book details:", bookDetails); // DEBUG LOG
         res.json(bookDetails);
 
     } catch (err) {
@@ -115,16 +115,12 @@ app.get("/api/books/:id", async (req, res) => {
     }
 });
 
-// app.listen(port, () => {
-//   console.log(`✅ Backend server running on http://localhost:${port}`);
+
+// FIX 3: Removed ALL app.listen() blocks. This is essential for Vercel.
+// const PORT = process.env.PORT || 3001;
+// app.listen(PORT, () => {
+//   console.log(`Server is running on port ${PORT}`);
 // });
 
-// This is for running the server locally
-const PORT = process.env.PORT || 3001;
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
-
-
-// Export the app handler for Vercel
+// This is the only line needed at the end for Vercel to use the file.
 module.exports = app;
