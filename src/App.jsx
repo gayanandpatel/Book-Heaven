@@ -5,12 +5,10 @@ import Homepage from './components/Homepage.jsx';
 import BookNotes from './components/BookNotes.jsx';
 import './index.css';
 
-// The API now has a /api prefix for clarity
+
 // for local development, this points to the backend server
 const API_URL = "http://localhost:3000/api";
 
-// for deployed environments, this uses a relative path
-// const API_URL = "/api";
 
 
 
@@ -25,7 +23,7 @@ const App = () => {
   const [sortBy, setSortBy] = useState('best');
   const [searchQuery, setSearchQuery] = useState('');
 
-  // for local development, this was the original fetch logic
+
   useEffect(() => {
     const fetchBooks = async () => {
       setIsLoading(true);
@@ -52,35 +50,6 @@ const App = () => {
 
     fetchBooks();
   }, [sortBy, searchQuery]);
-
-
-  // for deployed environments, this uses a relative path
-  // useEffect(() => {
-  //   const fetchBooks = async () => {
-  //     setIsLoading(true);
-  //     setError(null);
-  //     try {
-  //       // FIXED: Added window.location.origin as the base for the relative URL.
-  //       const url = new URL(`${API_URL}/books`, window.location.origin);
-  //       url.searchParams.append('sort', sortBy);
-  //       if (searchQuery) {
-  //         url.searchParams.append('search', searchQuery);
-  //       }
-
-  //       const response = await fetch(url);
-  //       if (!response.ok) {
-  //         throw new Error('Failed to fetch books from the server. Is the backend running?');
-  //       }
-  //       const data = await response.json();
-  //       setBooks(data);
-  //     } catch (err) {
-  //       setError(err.message);
-  //     }
-  //     setIsLoading(false);
-  //   };
-
-  //   fetchBooks();
-  // }, [sortBy, searchQuery]);
 
   const navigateTo = (page, bookId = null) => {
     setCurrentPage(page);

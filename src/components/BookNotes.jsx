@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styles from './BookNotes.module.css';
 
-// The API now has a /api prefix for clarity
+
 const API_URL = "http://localhost:3000/api";
 
 const BookNotes = ({ bookId, navigateTo }) => {
@@ -21,7 +21,7 @@ const BookNotes = ({ bookId, navigateTo }) => {
       setError(null);
 
       try {
-        // Updated URL to fetch from /api/books/:id
+        
         const response = await fetch(`${API_URL}/books/${bookId}`);
         if (!response.ok) {
           throw new Error(`Could not find the book. It may have been deleted.`);

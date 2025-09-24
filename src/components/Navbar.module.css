@@ -71,14 +71,14 @@
   margin: 0;
   border-radius: 0.25rem;
   border: 1px solid #27548A;
-  overflow: hidden; /* Ensures child elements conform to border radius */
+  overflow: hidden; 
 }
 
 .dropdown:hover .dropdownMenu {
   display: block;
 }
 
-/* --- FIX: Correctly style the buttons inside the dropdown --- */
+
 .dropdownItem {
   /* Reset default button styles */
   background: none;
@@ -92,7 +92,7 @@
   padding: 12px 16px;
   text-decoration: none;
   display: block;
-  font-size: 1rem; /* Match other font sizes */
+  font-size: 1rem; 
   transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
 }
 
