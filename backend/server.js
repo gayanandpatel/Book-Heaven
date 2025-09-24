@@ -9,7 +9,6 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const app = express();
-const port = 3000;
 
 app.use(cors());
 
@@ -24,6 +23,9 @@ const db = new pg.Client({
   }
 });
 
+// BEST PRACTICE: Removed db.connect() from the top level.
+// The pg library will handle connecting when a query is made,
+// which is more reliable in a serverless environment.
 db.connect();
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -70,8 +72,6 @@ app.get("/api/books", async (req, res) => {
 app.get("/api/books/:id", async (req, res) => {
     try {
         const bookId = req.params.id;
-        console.log(`\n--- Fetching book with ID: ${bookId} ---`); // DEBUG LOG
-        
         const query = `
             SELECT 
                 b.id, b.book_name, b.author, b.isbn, b.date, b.recommendation,
@@ -83,10 +83,7 @@ app.get("/api/books/:id", async (req, res) => {
         
         const result = await db.query(query, [bookId]);
         
-        console.log("Raw database response rows:", result.rows); // DEBUG LOG
-        
         if (result.rows.length === 0) {
-            console.log(`No book found for ID: ${bookId}`); // DEBUG LOG
             return res.status(404).json({ error: "Book not found." });
         }
         
@@ -109,7 +106,6 @@ app.get("/api/books/:id", async (req, res) => {
             }
         });
         
-        console.log("Assembled book details:", bookDetails); // DEBUG LOG
         res.json(bookDetails);
 
     } catch (err) {
@@ -119,16 +115,11 @@ app.get("/api/books/:id", async (req, res) => {
 });
 
 
-// for local testing only
-app.listen(port, () => {
-  console.log(`✅ Backend server running on http://localhost:${port}`);
-});
-
-// FIX 3: Removed ALL app.listen() blocks. This is essential for Vercel.
-// const PORT = process.env.PORT || 3001;
-// app.listen(PORT, () => {
-//   console.log(`Server is running on port ${PORT}`);
+// DELETED: The local app.listen() block must be removed for Vercel.
+// app.listen(port, () => {
+//   console.log(`✅ Backend server running on http://localhost:${port}`);
 // });
 
-// This is the only line needed at the end for Vercel to use the file.
-// module.exports = app;
+
+// ADDED: This is the correct way to export your app for Vercel when using ES Modules (import/export).
+export default app;
