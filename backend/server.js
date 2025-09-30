@@ -1,5 +1,3 @@
-// server.js
-
 import express from "express";
 import bodyParser from "body-parser";
 import pg from "pg";
@@ -121,12 +119,6 @@ app.get("/api/books/:id", async (req, res) => {
 app.listen(port, () => {
   console.log(`✅ Backend server running on http://localhost:${port}`);
 });
-
-// FIX 3: Removed ALL app.listen() blocks. This is essential for Vercel.
-// const PORT = process.env.PORT || 3001;
-// app.listen(PORT, () => {
-//   console.log(`Server is running on port ${PORT}`);
-// });
 
 // This is the only line needed at the end for Vercel to use the file.
 // module.exports = app;
